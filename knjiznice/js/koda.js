@@ -21,6 +21,9 @@ function getSessionId() {
     return response.responseJSON.sessionId;
 }
 
+function zazeniBota(){
+    alert("LA");
+}
 
 /**
  * Generator podatkov za novega pacienta, ki bo uporabljal aplikacijo. Pri
