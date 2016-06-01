@@ -57,7 +57,7 @@ function kreirajDatZaZdravnika(){
 	var simptomi = $("#VnosSimptomov").val();
 	var telefon = $("#dodajTelefonsko").val();
 	var urgenten = false;
-	if(document.getElementById("$izberiUrgenten").checked){
+	if(document.getElementById("izberiUrgenten").checked == Resno){
 		urgenten = true;
 	}
 	
