@@ -57,25 +57,35 @@ function kreirajDatZaZdravnika(){
 	var simptomi = $("#VnosSimptomov").val();
 	var telefon = $("#dodajTelefonsko").val();
 	var urgenten = false;
+	var sladkor = false;
+	var visina = $("#dodajTelesnoVisino").val();
 	
 	if(document.getElementById("izberiUrgenten").checked)
 	{
     	urgenten = true;
-		alert("LA");
 	}
-	
-	var bolnik = {
-		name: ime,
-		surname: priimek,
-		dateB: datumRojstva,
-		tel: telefon,
-		bodyWeight: teza,
-		bodyTemp: temp,
-		simptoms: simptomi,
-		urgent: urgenten
-	};
-	
-	tabela_civilisti.push(bolnik);
+	if(document.getElementById("izberiSladkor").checked)
+	{
+    	sladkor = true;
+	}
+	if (!ime || !priimek || !datumRojstva || !teza || !temp || !simptomi || !telefon || !visina  || ime.trim().length == 0 || priimek.trim().length == 0 || datumRojstva.trim().length == 0 || teza.trim().length == 0 || temp.trim().length == 0 || simptomi.trim().length == 0|| telefon.trim().length == 0|| visina.trim().length == 0) {
+		$("#kreirajSporocilo").html("<span class='obvestilo label " + "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
+	} 
+	else{
+		var bolnik = {
+			name: ime,
+			surname: priimek,
+			dateB: datumRojstva,
+			tel: telefon,
+			bodyWeight: teza,
+			bodyHeight: visina,
+			bodyTemp: temp,
+			simptoms: simptomi,
+			urgent: urgenten,
+			sugar: sladkor
+		};
+		tabela_civilisti.push(bolnik);
+	}
 }
 
 /* ============== ZDRAVNIK.HTML ==================== */

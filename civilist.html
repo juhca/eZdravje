@@ -58,12 +58,14 @@
 						<span class="label label-default">Priimek</span><input id="kreirajPriimek" type="text" class="form-control" placeholder="Bin Laden">
 						<span class="label label-default">Datum rojstva</span><input id="kreirajDatumRojstva" type="text" class="form-control" placeholder="1957-03-10T09:08">
 						<span class="label label-default">Telefonska številka</span><input id="dodajTelefonsko" type="text" class="form-control" placeholder="Mobilna tel. številka / Stacionarna tel. številka">
-						<span class="label label-default">Telesna Teža (v kg)</span><input id="dodajTezo" type="text" class="form-control" placeholder="100">
-						<span class="label label-default">Telesna Temperatura (v °C)</span><input id="dodajTelesnoTemp" type="text" class="form-control" placeholder="38">
+						<span class="label label-default">Telesna Teža (v kg)</span><input id="dodajTezo" type="text" class="form-control" placeholder="100.0">
+						<span class="label label-default">Telesna višina (v cm)</span><input id="dodajTelesnoVisino" type="text" class="form-control" placeholder="185">
+						<span class="label label-default">Telesna Temperatura (v °C)</span><input id="dodajTelesnoTemp" type="text" class="form-control" placeholder="38.5">
 						<span class="label label-default">Simptomi</span><br>
 						<textarea style="resize:none" id="VnosSimptomov" rows="4" cols="70" name="VnosTezav" placeholder=" Nazorno opiši simptome ..."></textarea>
-						<span class="label label-default">Izberi če meniš, da je primer urgenten</span>
-						<input type="checkbox" id="izberiUrgenten" name="resenPrimer" value="Resno"> Urgentno<br>
+						<span class="label label-default">Izberi če meniš, da je primer urgenten</span> <input type="checkbox" id="izberiUrgenten" name="resenPrimer" value="Resno"> Urgentno<br>
+						<span class="label label-default">Izberi če imaš sladkorno bolezen</span>	<input type="checkbox" id="izberiSladkor" name="resenPrimer" value="SladkoBolan"> Imam sladkorno bolezen
+						<p></p>
 						<center><button type="button" class="btn btn-primary btn-xs" onclick="kreirajDatZaZdravnika()">Dodaj osnovne podatke o bolniku</button><span id="kreirajSporocilo"></span></center>
 			  	</div>
 				</div>
