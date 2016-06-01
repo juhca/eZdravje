@@ -57,10 +57,9 @@ function kreirajDatZaZdravnika(){
 	var simptomi = $("#VnosSimptomov").val();
 	var telefon = $("#dodajTelefonsko").val();
 	var urgenten = false;
-	alert("LA");
-	if(document.getElementById("izberiUrgenten").value == "Resno"){
-		urgenten = true;
-	}
+	
+	var vrednost = document.getElementById("izberiUrgenten").value;
+	alert(vrednost);
 	
 	var bolnik = {
 		name: ime,
@@ -72,7 +71,6 @@ function kreirajDatZaZdravnika(){
 		simptoms: simptomi,
 		urgent: urgenten
 	};
-	alert(urgenten);
 	
 	tabela_civilisti.push(bolnik);
 }
