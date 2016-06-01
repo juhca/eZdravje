@@ -58,8 +58,11 @@ function kreirajDatZaZdravnika(){
 	var telefon = $("#dodajTelefonsko").val();
 	var urgenten = false;
 	
-	var vrednost = document.getElementById("izberiUrgenten").value;
-	alert(vrednost);
+	if(document.getElementById("izberiUrgenten").checked)
+	{
+      urgenten = true;
+	}
+	alert(urgenten);
 	
 	var bolnik = {
 		name: ime,
