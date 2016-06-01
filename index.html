@@ -6,7 +6,15 @@
   <link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
   <link href="knjiznice/css/stili.css" rel="stylesheet">
   <style>
-    body {padding-top: 70px;}
+    body {
+      padding-top: 70px;
+      /*background-image: url("./knjiznice/img/coverindex.png");	*/
+      background-image: url("./knjiznice/img/1008790-doctor.jpg");
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: 100% 25%; 
+      background-size: 100%;
+    }
   </style>
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
@@ -41,12 +49,13 @@
   <div class="container">
     <div class="row">
       <div class="centered">
-        Način prijave:<br>
-        <button type="button" id="zdravnik" onClick="pojdi_v_zdravnika()">Zdravnik</button>
-        <button type="button" id="civilist" onClick="pojdi_v_civilista()">Civilist</button><br>
-        </div>
+        <p class="pisava">NAČIN PRIJAVE:</p><br>
+        <a href="#" class="zdravnik" onClick="pojdi_v_zdravnika()">Zdravnik</a>
+        <a href="#" class="civilist" onClick="pojdi_v_civilista()">Civilist</a>
+      </div>
     </div>
   </div>
   <!-- KONEC: Vsebina aplikacije -->
 </body>
 </html>
+

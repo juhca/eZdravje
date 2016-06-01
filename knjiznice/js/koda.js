@@ -5,7 +5,7 @@ var queryUrl = baseUrl + '/query';
 var username = "ois.seminar";
 var password = "ois4fri";
 
-
+var tabela_civilisti = new Array();
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
  * enolične ID številke za dostop do funkcionalnosti
@@ -45,6 +45,38 @@ function generirajPodatke(stPacienta) {
 
   return ehrId;
 }
+
+/* ============== CIVILIST.HTML ==================== */
+
+function kreirajDatZaZdravnika(){
+	var ime = $("#kreirajIme").val();
+	var priimek = $("#kreirajPriimek").val();
+	var datumRojstva = $("#kreirajDatumRojstva").val();
+	var teza = $("#dodajTezo").val();
+	var temp = $("#dodajTelesnoTemp").val();
+	var simptomi = $("#VnosSimptomov").val();
+	var telefon = $("#dodajTelefonsko").val();
+	var urgenten = false;
+	if(document.getElementById("$izberiUrgenten").checked){
+		urgenten = true;
+	}
+	
+	var bolnik = {
+		name: ime,
+		surname: priimek,
+		dateB: datumRojstva,
+		tel: telefon,
+		bodyWeight: teza,
+		bodyTemp: temp,
+		simptoms: simptomi,
+		urgent: urgenten
+	};
+	alert(urgenten);
+	
+	tabela_civilisti.push(bolnik);
+}
+
+/* ============== ZDRAVNIK.HTML ==================== */
 
 
 /**
