@@ -60,9 +60,9 @@ function kreirajDatZaZdravnika(){
 	
 	if(document.getElementById("izberiUrgenten").checked)
 	{
-      urgenten = true;
+    	urgenten = true;
+		alert(document.getElementById("izberiUrgenten").checked);
 	}
-	alert(urgenten);
 	
 	var bolnik = {
 		name: ime,
