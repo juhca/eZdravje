@@ -57,7 +57,8 @@ function kreirajDatZaZdravnika(){
 	var simptomi = $("#VnosSimptomov").val();
 	var telefon = $("#dodajTelefonsko").val();
 	var urgenten = false;
-	if(document.getElementById("izberiUrgenten").checked == Resno){
+	//alert("LA");
+	if(document.getElementById("izberiUrgenten").checked == "Resno"){
 		urgenten = true;
 	}
 	
