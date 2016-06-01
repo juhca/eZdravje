@@ -61,7 +61,7 @@ function kreirajDatZaZdravnika(){
 	if(document.getElementById("izberiUrgenten").checked)
 	{
     	urgenten = true;
-		alert(document.getElementById("izberiUrgenten").checked);
+		alert("LA");
 	}
 	
 	var bolnik = {
