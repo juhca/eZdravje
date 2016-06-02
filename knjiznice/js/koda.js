@@ -72,8 +72,10 @@ function kreirajDatZaZdravnika(){
 		$("#kreirajSporocilo").html("<span class='obvestilo label " + "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
 	} 
 	else{
-		ehrId = ustvariEHRzaGeneriran(ime, priimek, datumRojstva);
-		alert("Sem v civilistu "+ehrId);
+		stvariEHRzaGeneriran(ime, priimek, datumRojstva);
+		var ehrId = $("#preberiEHRid").val();
+		alert("Sem v civilistu - BEREM IZ INPUTA "+ehrId);
+		
 		var bolnik = {
 			name: ime,
 			surname: priimek,
@@ -132,10 +134,8 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva){
 	            data: JSON.stringify(partyData),
 	            success: function (party) {
 	                if (party.action == 'CREATE') {
-	                	return $("#preberiEHRid").val(ehrId);
-	                	/*
-	                    $("#kreirajSporocilo").html("<span class='obvestilo " + "label label-success fade-in'>Uspešno kreiran EHR '" + ehrId + "'.</span>");
-	                    $("#preberiEHRid").val(ehrId);*/
+	                    /*$("#kreirajSporocilo").html("<span class='obvestilo " + "label label-success fade-in'>Uspešno kreiran EHR '" + ehrId + "'.</span>");*/
+	                    $("#preberiEHRid").val(ehrId);
 	                }
 	            },
 	            error: function(err) {
