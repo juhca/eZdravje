@@ -1,4 +1,3 @@
-
 var baseUrl = 'https://rest.ehrscape.com/rest/v1';
 var queryUrl = baseUrl + '/query';
 
@@ -55,6 +54,9 @@ function generirajPodatke(stPacienta) {
 }
 
 /* ============== CIVILIST.HTML ==================== */
+var bolnik = {};
+
+
 
 function kreirajDatZaZdravnika(){
 	var ime = $("#kreirajIme").val();
@@ -80,10 +82,6 @@ function kreirajDatZaZdravnika(){
 		$("#kreirajSporocilo").html("<span class='obvestilo label " + "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
 	} 
 	else{
-		ustvariEHRzaGeneriran(ime, priimek, datumRojstva);
-		var ehrId = $("#preberiEHRid").val();
-		alert("Sem v civilistu - BEREM IZ INPUTA "+ehrId);
-		
 		var bolnik = {
 			name: ime,
 			surname: priimek,
@@ -95,9 +93,10 @@ function kreirajDatZaZdravnika(){
 			simptoms: simptomi,
 			urgent: urgenten,
 			sugar: sladkor,
-			ehr: ehrId
+			ehr: 5
 		};
-		tabela_civilisti.push(bolnik);
+		
+		ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik);
 	}
 	
 }
@@ -118,7 +117,7 @@ function izracunajBMI(){
 	} 
 }
 
-function ustvariEHRzaGeneriran(ime, priimek, datumRojstva){
+function ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik){
 	sessionId = getSessionId();
 
 	$.ajaxSetup({
@@ -144,6 +143,8 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva){
 	                if (party.action == 'CREATE') {
 	                    $("#kreirajSporocilo").html("<span class='obvestilo " + "label label-success fade-in'>Uspešno kreiran EHR '" + ehrId + "'.</span>");
 	                    $("#preberiEHRid").val(ehrId);
+	                    bolnik.ehr = ehrId;
+	                    tabela_civilisti.push(bolnik);
 	                }
 	            },
 	            error: function(err) {
@@ -507,5 +508,54 @@ $(document).ready(function() {
 		$("#rezultatMeritveVitalnihZnakov").html("");
 		$("#meritveVitalnihZnakovEHRid").val($(this).val());
 	});
+
+
+	$("CivilistShrani").click(function(){
+		alert("LA");
+		var ime = $("#kreirajIme").val();
+		var priimek = $("#kreirajPriimek").val();
+		var datumRojstva = $("#kreirajDatumRojstva").val();
+		var teza = $("#dodajTezo").val();
+		var temp = $("#dodajTelesnoTemp").val();
+		var simptomi = $("#VnosSimptomov").val();
+		var telefon = $("#dodajTelefonsko").val();
+		var urgenten = false;
+		var sladkor = false;
+		var visina = $("#dodajTelesnoVisino").val();
+		
+		if(document.getElementById("izberiUrgenten").checked)
+		{
+	    	urgenten = true;
+		}
+		if(document.getElementById("izberiSladkor").checked)
+		{
+	    	sladkor = true;
+		}
+		if (!ime || !priimek || !datumRojstva || !teza || !temp || !simptomi || !telefon || !visina  || ime.trim().length == 0 || priimek.trim().length == 0 || datumRojstva.trim().length == 0 || teza.trim().length == 0 || temp.trim().length == 0 || simptomi.trim().length == 0|| telefon.trim().length == 0|| visina.trim().length == 0) {
+			$("#kreirajSporocilo").html("<span class='obvestilo label " + "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
+		} 
+		else{
+			ustvariEHRzaGeneriran(ime, priimek, datumRojstva);
+			var ehrId = kreiranEHR;
+			alert("SSSem v civilistu - BEREM IZ INPUTA "+($("#preberiEHRid").val()));
+			
+			var bolnik = {
+				name: ime,
+				surname: priimek,
+				dateB: datumRojstva,
+				tel: telefon,
+				bodyWeight: teza,
+				bodyHeight: visina,
+				bodyTemp: temp,
+				simptoms: simptomi,
+				urgent: urgenten,
+				sugar: sladkor,
+				ehr: $("#preberiEHRid").val()
+			};
+			alert(bolnik.ehr);
+			tabela_civilisti.push(bolnik);
+		}
+	});
+
 
 });
