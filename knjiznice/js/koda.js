@@ -38,12 +38,20 @@ function pojdi_v_zdravnika(){
  * @param stPacienta zaporedna številka pacienta (1, 2 ali 3)
  * @return ehrId generiranega pacienta
  */
+function generiraj(){
+	for (var i=1; i <= 3; i++)
+	{
+		ehr = generirajPodatke(i);
+	}
+}
+ 
 function generirajPodatke(stPacienta) {
   ehrId = "";
-
-  // TODO: Potrebno implementirati
-
-  return ehrId;
+	// odprem datoteko
+	jQuery.get('./generiranje_podatkov.txt', function(txt){
+		$('#branje').text(txt);
+	});
+	return 1;
 }
 
 /* ============== CIVILIST.HTML ==================== */
@@ -72,7 +80,7 @@ function kreirajDatZaZdravnika(){
 		$("#kreirajSporocilo").html("<span class='obvestilo label " + "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
 	} 
 	else{
-		stvariEHRzaGeneriran(ime, priimek, datumRojstva);
+		ustvariEHRzaGeneriran(ime, priimek, datumRojstva);
 		var ehrId = $("#preberiEHRid").val();
 		alert("Sem v civilistu - BEREM IZ INPUTA "+ehrId);
 		
@@ -134,7 +142,7 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva){
 	            data: JSON.stringify(partyData),
 	            success: function (party) {
 	                if (party.action == 'CREATE') {
-	                    /*$("#kreirajSporocilo").html("<span class='obvestilo " + "label label-success fade-in'>Uspešno kreiran EHR '" + ehrId + "'.</span>");*/
+	                    $("#kreirajSporocilo").html("<span class='obvestilo " + "label label-success fade-in'>Uspešno kreiran EHR '" + ehrId + "'.</span>");
 	                    $("#preberiEHRid").val(ehrId);
 	                }
 	            },
