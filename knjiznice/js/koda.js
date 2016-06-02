@@ -73,7 +73,7 @@ function kreirajDatZaZdravnika(){
 	} 
 	else{
 		ehrId = ustvariEHRzaGeneriran(ime, priimek, datumRojstva);
-		alert(ehrId);
+		alert("Sem v civilistu "+ehrId);
 		var bolnik = {
 			name: ime,
 			surname: priimek,
