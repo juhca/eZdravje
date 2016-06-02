@@ -82,10 +82,69 @@ function kreirajDatZaZdravnika(){
 			bodyTemp: temp,
 			simptoms: simptomi,
 			urgent: urgenten,
-			sugar: sladkor
+			sugar: sladkor,
+			ehr: null
 		};
 		tabela_civilisti.push(bolnik);
 	}
+	ustvariEHRzaGeneriran(ime, priimek, datumRojstva);
+}
+
+function izracunajBMI(){
+	var teza = $("#dodajTezo").val();
+	var visina = $("#dodajTelesnoVisino").val();
+	if (teza  && visina   && teza.trim().length != 0 && visina.trim().length != 0) {
+		visina = visina / 100;
+		var bmi = (teza/(visina*visina));
+		if(!bmi.isNaN ){
+			if(bmi > 35 || bmi < 20){
+				var image = document.getElementById('razocaranZdravnik');
+				image.src = "./knjiznice/img/Unhappy-doctor.jpg";
+				image.style.visibility = 'visible';
+			}
+		}
+	} 
+}
+
+function ustvariEHRzaGeneriran(ime, priimek, datumRojstva){
+	sessionId = getSessionId();
+
+	$.ajaxSetup({
+	    headers: {"Ehr-Session": sessionId}
+	});
+	$.ajax({
+	    url: baseUrl + "/ehr",
+	    type: 'POST',
+	    success: function (data) {
+	        var ehrId = data.ehrId;
+	        var partyData = {
+	            firstNames: ime,
+	            lastNames: priimek,
+	            dateOfBirth: datumRojstva,
+	            partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
+	        };
+	        $.ajax({
+	            url: baseUrl + "/demographics/party",
+	            type: 'POST',
+	            contentType: 'application/json',
+	            data: JSON.stringify(partyData),
+	            success: function (party) {
+	                if (party.action == 'CREATE') {
+	                	alert(ehrId);
+	                    $("#kreirajSporocilo").html("<span class='obvestilo " +
+                      "label label-success fade-in'>Uspešno kreiran EHR '" +
+                      ehrId + "'.</span>");
+	                    $("#preberiEHRid").val(ehrId);
+	                }
+	            },
+	            error: function(err) {
+	            	$("#kreirajSporocilo").html("<span class='obvestilo label " +
+                "label-danger fade-in'>Napaka '" +
+                JSON.parse(err.responseText).userMessage + "'!");
+	            }
+	        });
+	    }
+	});
 }
 
 /* ============== ZDRAVNIK.HTML ==================== */
