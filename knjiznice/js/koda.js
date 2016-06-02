@@ -72,6 +72,8 @@ function kreirajDatZaZdravnika(){
 		$("#kreirajSporocilo").html("<span class='obvestilo label " + "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
 	} 
 	else{
+		ehrId = ustvariEHRzaGeneriran(ime, priimek, datumRojstva);
+		alert(ehrId);
 		var bolnik = {
 			name: ime,
 			surname: priimek,
@@ -83,11 +85,11 @@ function kreirajDatZaZdravnika(){
 			simptoms: simptomi,
 			urgent: urgenten,
 			sugar: sladkor,
-			ehr: null
+			ehr: ehrId
 		};
 		tabela_civilisti.push(bolnik);
 	}
-	ustvariEHRzaGeneriran(ime, priimek, datumRojstva);
+	
 }
 
 function izracunajBMI(){
@@ -130,11 +132,10 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva){
 	            data: JSON.stringify(partyData),
 	            success: function (party) {
 	                if (party.action == 'CREATE') {
-	                	alert(ehrId);
-	                    $("#kreirajSporocilo").html("<span class='obvestilo " +
-                      "label label-success fade-in'>Uspešno kreiran EHR '" +
-                      ehrId + "'.</span>");
-	                    $("#preberiEHRid").val(ehrId);
+	                	return ehrId;
+	                	/*
+	                    $("#kreirajSporocilo").html("<span class='obvestilo " + "label label-success fade-in'>Uspešno kreiran EHR '" + ehrId + "'.</span>");
+	                    $("#preberiEHRid").val(ehrId);*/
 	                }
 	            },
 	            error: function(err) {
