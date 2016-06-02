@@ -132,7 +132,7 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva){
 	            data: JSON.stringify(partyData),
 	            success: function (party) {
 	                if (party.action == 'CREATE') {
-	                	return ehrId;
+	                	return $("#preberiEHRid").val(ehrId);
 	                	/*
 	                    $("#kreirajSporocilo").html("<span class='obvestilo " + "label label-success fade-in'>Uspešno kreiran EHR '" + ehrId + "'.</span>");
 	                    $("#preberiEHRid").val(ehrId);*/
