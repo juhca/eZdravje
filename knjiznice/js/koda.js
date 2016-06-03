@@ -45,13 +45,11 @@ function generiraj(){
 }
  
 function generirajPodatke(stPacienta) {
-	ehrId = "";
-
 	jQuery.get('./pacienti/'+stPacienta+'.txt', function(txt){
 		$('#branje').text(txt);
 		var tekt = $('#branje').val();
 		tekt = tekt.split("/");
-		
+		/*
 		var bolnik = {
 			name: tekt[0],
 			surname: tekt[1],
@@ -68,10 +66,20 @@ function generirajPodatke(stPacienta) {
 			urgent: "false",
 			sugar: "false",
 			sestra: tekt[9],
-			ehr: 5
-		};
+			ehr: tekt[12]
+		};*/
+		vstavi(tekt);
+		//alert(tekt.length);
+	//	alert(tekt[12]);
+		//var select = document.getElementById("preberiObstojeciVitalniZnak");
+	//	select.innerHTML += "<option value="+bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+bolnik.SKrvni+"|"+bolnik.DKrvni+"|"+bolnik.NKrvi+"|"+bolnik.sestra+">"+bolnik.name+" "+bolnik.surname+"</option>";
+	//	select.innerHTML += "<option value="+tekt[12]+"|"+tekt[3]+"|"+tekt[4]+"|"+tekt[5]+"|"+tekt[11]+"|"+tekt[6]+"|"+tekt[7]+"|"+tekt[8]+"|"+tekt[9]+">"+tekt[0]+" "+tekt[1]+"</option>";
 	});
-	return ehrId;
+}
+
+function vstavi(tekt){
+	var select = document.getElementById("preberiObstojeciVitalniZnak");
+	select.innerHTML += "<option value="+tekt[12]+"|"+tekt[3]+"|"+tekt[4]+"|"+tekt[5]+"|"+tekt[11]+"|"+tekt[6]+"|"+tekt[7]+"|"+tekt[8]+"|"+tekt[9]+">"+tekt[0]+" "+tekt[1]+"</option>";
 }
 
 /* ============== CIVILIST.HTML ==================== */
@@ -118,7 +126,7 @@ function kreirajDatZaZdravnika(){
 			"sestra": "N/A",
 			"ehr": 5
 		};
-		ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik);
+		ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik, "pacient");
 	}
 	
 }
@@ -142,8 +150,7 @@ function izracunajBMI(){
 		}
 	} 
 }
-
-function ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik){
+function ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik, nacin){
 	sessionId = getSessionId();
 
 	$.ajaxSetup({
@@ -170,16 +177,24 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik){
 	                    $("#kreirajSporocilo").html("<span class='obvestilo " + "label label-success fade-in'>Uspešno kreiran EHR '" + ehrId + "'.</span>");
 	                    $("#preberiEHRid").val(ehrId);
 	                    bolnik.ehr = ehrId;
-	                    tabela_civilisti.push(bolnik);
+	                    
+	                   // $("#preberiObstojeciVitalniZnak").append("<option value="+bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A"+">"+bolnik.name+" "+bolnik.surname+"</option>");
+	                   // tabela_civilisti.push(bolnik);
 	                    	// kar dodaj ga ze na un sraje
-	                    //var select = document.getElementById("preberiObstojeciVitalniZnak");
 	                    /*
 	                    var novo = document.createElement("option");
 	                    novo.value = bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A";
 	                    novo.innerHTML = bolnik.name+" "+bolnik.surname;
 	                    select.add(novo);*/
-	                    //select.innerHTML += "<option value="+bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A"+">"+bolnik.name+" "+bolnik.surname+"</option>";
-	            		$("#preberiObstojeciVitalniZnak").html("<option value="+bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A"+">"+bolnik.name+" "+bolnik.surname+"</option>");
+	                //    alert("SITUKAJ");
+	            	//	vstaviPacientaPrekoPrijave(bolnik);
+	                //	document.getElementById("branje").text("<option value="+bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A"+">"+bolnik.name+" "+bolnik.surname+"</option>");
+	                //	document.getElementById("branje").text("</option>");
+	                //	$('#branje').text("</option>");
+	                	if(nacin == "pacient")	
+	                	{
+	                		window.name = "<option value="+bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A"+">"+bolnik.name+" "+bolnik.surname+"</option>";
+	                	}
 	                	
 	                }
 	            },
@@ -196,18 +211,10 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik){
 /* ============== ZDRAVNIK.HTML ==================== */
 
 function vstaviPaciente(){
-		// funkcijo izvedem le, ce je indeks tabele vecji od 0 (torej vsebuje vsaj en element)
-		/*
-		 var select = document.getElementById("preberiObstojeciVitalniZnak");
-		 select.innerHTML += "<option value=b931580f-2b05-488b-985b-8d9ffb08ad02|2014-11-21T11:40Z|185|80.0|36.50|118|92|98|medicinska sestra Smrketa>PAPA PUJSFF Smrk</option>";*/
-	if(tabela_civilisti.length > 0)
+	if(window.name != "")
 	{
-			// grem cez celotno tabelo
-		for(var i = 0; i < tabela_civilisti.length; i++)
-		{
-			alert(tabela_civilisti[i]);
-		}
-		//<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiObstojeciVitalniZnak"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02|2014-11-21T11:40Z|185|80.0|36.50|118|92|98|medicinska sestra Smrketa">Ata Smrk</option></select></div>
+		var select = document.getElementById("preberiObstojeciVitalniZnak");
+		select.innerHTML += window.name;
 	}
 }
 
