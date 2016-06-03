@@ -37,20 +37,41 @@ function pojdi_v_zdravnika(){
  * @param stPacienta zaporedna številka pacienta (1, 2 ali 3)
  * @return ehrId generiranega pacienta
  */
+ var stevec = 1;
 function generiraj(){
-	for (var i=1; i <= 3; i++)
-	{
-		ehr = generirajPodatke(i);
-	}
+	if(stevec > 3) stevec = 1;
+	generirajPodatke(stevec);
+	stevec++;
 }
  
 function generirajPodatke(stPacienta) {
-  ehrId = "";
-	// odprem datoteko
-	jQuery.get('./generiranje_podatkov.txt', function(txt){
+	ehrId = "";
+
+	jQuery.get('./pacienti/'+stPacienta+'.txt', function(txt){
 		$('#branje').text(txt);
+		var tekt = $('#branje').val();
+		tekt = tekt.split("/");
+		
+		var bolnik = {
+			name: tekt[0],
+			surname: tekt[1],
+			dateB: tekt[2],
+			dateCreated: tekt[3],
+			tel: tekt[10],
+			bodyWeight: tekt[5],
+			bodyHeight: tekt[4],
+			SKrvni: tekt[6],
+			DKrvni: tekt[7],
+			NKrvi: tekt[8],
+			bodyTemp: tekt[11],
+			simptoms: "N/A",
+			urgent: "false",
+			sugar: "false",
+			sestra: tekt[9],
+			ehr: 5
+		};
 	});
-	return 1;
+	return ehrId;
 }
 
 /* ============== CIVILIST.HTML ==================== */
@@ -83,19 +104,20 @@ function kreirajDatZaZdravnika(){
 	} 
 	else{
 		var bolnik = {
-			name: ime,
-			surname: priimek,
-			dateB: datumRojstva,
-			tel: telefon,
-			bodyWeight: teza,
-			bodyHeight: visina,
-			bodyTemp: temp,
-			simptoms: simptomi,
-			urgent: urgenten,
-			sugar: sladkor,
-			ehr: 5
+			"name": ime,
+			"surname": priimek,
+			"dateB": datumRojstva,
+			"dateCreated": "2016-06-02T14:50Z",
+			"tel": telefon,
+			"bodyWeight": teza,
+			"bodyHeight": visina,
+			"bodyTemp": temp,
+			"simptoms": simptomi,
+			"urgent": urgenten,
+			"sugar": sladkor,
+			"sestra": "N/A",
+			"ehr": 5
 		};
-		
 		ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik);
 	}
 	
@@ -108,10 +130,14 @@ function izracunajBMI(){
 		visina = visina / 100;
 		var bmi = (teza/(visina*visina));
 		if(!bmi.isNaN ){
+			var image = document.getElementById('razocaranZdravnik');
 			if(bmi > 35 || bmi < 20){
 				var image = document.getElementById('razocaranZdravnik');
 				image.src = "./knjiznice/img/Unhappy-doctor.jpg";
 				image.style.visibility = 'visible';
+			}
+			else{
+				image.style.visibility = 'hidden';
 			}
 		}
 	} 
@@ -145,6 +171,16 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik){
 	                    $("#preberiEHRid").val(ehrId);
 	                    bolnik.ehr = ehrId;
 	                    tabela_civilisti.push(bolnik);
+	                    	// kar dodaj ga ze na un sraje
+	                    //var select = document.getElementById("preberiObstojeciVitalniZnak");
+	                    /*
+	                    var novo = document.createElement("option");
+	                    novo.value = bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A";
+	                    novo.innerHTML = bolnik.name+" "+bolnik.surname;
+	                    select.add(novo);*/
+	                    //select.innerHTML += "<option value="+bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A"+">"+bolnik.name+" "+bolnik.surname+"</option>";
+	            		$("#preberiObstojeciVitalniZnak").html("<option value="+bolnik.ehr+"|"+bolnik.dateCreated+"|"+bolnik.bodyHeight+"|"+bolnik.bodyWeight+"|"+bolnik.bodyTemp+"|"+"118|92|98|N/A"+">"+bolnik.name+" "+bolnik.surname+"</option>");
+	                	
 	                }
 	            },
 	            error: function(err) {
@@ -159,6 +195,21 @@ function ustvariEHRzaGeneriran(ime, priimek, datumRojstva, bolnik){
 
 /* ============== ZDRAVNIK.HTML ==================== */
 
+function vstaviPaciente(){
+		// funkcijo izvedem le, ce je indeks tabele vecji od 0 (torej vsebuje vsaj en element)
+		/*
+		 var select = document.getElementById("preberiObstojeciVitalniZnak");
+		 select.innerHTML += "<option value=b931580f-2b05-488b-985b-8d9ffb08ad02|2014-11-21T11:40Z|185|80.0|36.50|118|92|98|medicinska sestra Smrketa>PAPA PUJSFF Smrk</option>";*/
+	if(tabela_civilisti.length > 0)
+	{
+			// grem cez celotno tabelo
+		for(var i = 0; i < tabela_civilisti.length; i++)
+		{
+			alert(tabela_civilisti[i]);
+		}
+		//<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiObstojeciVitalniZnak"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02|2014-11-21T11:40Z|185|80.0|36.50|118|92|98|medicinska sestra Smrketa">Ata Smrk</option></select></div>
+	}
+}
 
 /**
  * Kreiraj nov EHR zapis za pacienta in dodaj osnovne demografske podatke.
