@@ -3,6 +3,142 @@ var queryUrl = baseUrl + '/query';
 
 var username = "ois.seminar";
 var password = "ois4fri";
+/*
+
+var chartData = [{
+		"country": "USA",
+		"visits": 4252
+	}, {
+		"country": "China",
+		"visits": 1882
+	}, {
+		"country": "Japan",
+		"visits": 1809
+	}, {
+		"country": "Germany",
+		"visits": 1322
+	}, {
+		"country": "UK",
+		"visits": 1122
+	}, {
+		"country": "France",
+		"visits": 1114
+	}, {
+		"country": "India",
+		"visits": 984
+	}, {
+		"country": "Spain",
+		"visits": 711
+	}, {
+		"country": "Netherlands",
+		"visits": 665
+	}, {
+		"country": "Russia",
+		"visits": 580
+	}, {
+		"country": "South Korea",
+		"visits": 443
+	}, {
+		"country": "Canada",
+		"visits": 441
+	}, {
+		"country": "Brazil",
+		"visits": 395
+	}, {
+		"country": "Italy",
+		"visits": 386
+	}, {
+		"country": "Australia",
+		"visits": 384
+	}, {
+		"country": "Taiwan",
+		"visits": 338
+	}, {
+		"country": "Poland",
+		"visits": 328
+	}];*/
+	
+var prikazan_graf = 0;
+var chartData = [];
+
+function narisi_graf(){
+	var select1 = document.getElementById("preberiTipZaVitalneZnake").selectedIndex;
+	var select2 = document.getElementById("preberiEhrIdZaVitalneZnake").selectedIndex;
+	if(select2 > 0)
+	{
+		sessionId = getSessionId();
+		var ehrId = $("#meritveVitalnihZnakovEHRid").val();
+			
+			// zacetek grafa
+		var chart = new AmCharts.AmSerialChart();
+		var graph = new AmCharts.AmGraph();
+			// telesna temperatura
+		if(select1 == 0)
+		{
+			$.ajax({
+			    url: baseUrl + "/view/" + ehrId + "/body_temperature",
+			    type: 'GET',
+			    headers: {"Ehr-session": sessionId},
+			    success: function (res) {
+			        for (var i in res) {
+			        //	alert(res[i].time + ': ' + res[i].temperature  + res[i].unit);
+			            //$("#result").append(res[i].time + ': ' + res[i].temperature  + res[i].unit + "<br>");
+			        	var objekt = {
+			        		"time": res[i].time,
+			        		"temperature": res[i].temperature
+			        	};
+			        	chartData.push(objekt);
+			        }
+					chart.dataProvider = chartData;
+					chart.categoryField = "time";
+					graph.valueField = "temperature";
+				//	graph.type = "column";
+					chart.addGraph(graph);
+					var categoryAxis = chart.categoryAxis;
+					categoryAxis.autoGridCount  = false;
+					categoryAxis.gridCount = chartData.length;
+					categoryAxis.gridPosition = "start";
+					categoryAxis.labelRotation = 90;
+					
+					/*
+					graph.fillAlphas = 0.8;
+					chart.angle = 30;
+					chart.depth3D = 15;
+					*/
+					
+					graph.type = "line";
+					graph.fillAlphas = 0;
+					graph.bullet = "round";
+					graph.lineColor = "#ff0000";
+					
+					graph.balloonText = "[[category]]: <b>[[value]] °C</b>";
+					
+					chart.write('grafiDiv');
+			    }
+			});
+		}
+			// telesna visina
+		else if(select1 == 1)
+		{
+			
+		}
+			// telesna teza
+		else
+		{
+			
+		}
+		prikazan_graf = 1;
+		
+	}
+	else{
+		if(prikazan_graf == 1)
+		{
+				// zbrisem graf
+			document.getElementById("grafiDiv").innerHTML = "";
+			prikazan_graf = 0;
+		}
+	}
+}
 
 var tabela_civilisti = new Array();
 /**
