@@ -22,7 +22,7 @@
           <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
         </button>
         <!-- ZAČETEK: Ime vaše aplikacije -->
-        <a class="navbar-brand" href="index.html">{ime vaše aplikacije}</a>
+        <a class="navbar-brand" href="index.html">Macrosoft Pro Health</a>
         <!-- KONEC: Ime vaše aplikacije -->
       </div>
       <div class="collapse navbar-collapse" id="menujska-vrstica">
@@ -45,10 +45,9 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Opis ideje, ki jo aplikacija podpira -->
-            <p>Ob prihodu na korensko stran, uporabnik izbere, kako se bo prijavil. Če je uporabnik npr. pacient, vnese osnovne podatke in se podatki shranijo v neki podatkovni bazi (v mojem primeru samo v Object array). Zdravnik potem lahko prebere njegove simptome in če si želi ga lahko pokliče.</p>
-            <p>Ciljna publika moje aplikacije je zelo obširna. Obsega zdravnike in paciente. </p>
-            <p>Sam namen aplikacije pa je, da se zdravnik lahko optimalno razporedi urnik in sprva vzame urgentnejše primere.</p>
-            <p>Dodal sem tudi en "skoraj" master/detail implementacijo ko vstaviš nezdrav BMI, ko se civilist vpiše.</p>
+            <p>Ob prihodu na korensko stran, uporabnik izbere, kako se bo prijavil. Če je uporabnik npr. pacient, vnese osnovne podatke in se podatki shranijo v neki podatkovni bazi (v mojem primeru samo v windows.name). Zdravnik ga potem lahko izbere iz padajočega menija in vnese dodatne podatke. </p>
+            <p>Ciljna publika moje aplikacije je zelo ozka. Aplikacijo naj bi uporabljali "zdravniki" in morebitni pacienti.</p>
+            <p>Namen moje aplikacije je dvojen: pacient se lahko vpiše in posreduje podatke zdravniku, zdravnik pa lahko pregleduje paciente in njihovo zdravstveno zgodovino v obliki tabele in/ali grafa.</p>
             <!-- KONEC: Opis ideje, ki jo aplikacija podpira -->
           </div>
         </div>
@@ -59,8 +58,10 @@
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
             <p>
-              <li>EHR</li>
+              <li>EHRScape</li>
               <li>Facebook Like</li>
+              <li>AmCharts ~ za grafe</li>
+              <li>Statične datoteke za generacijo uporabnikov</li>
             </p>
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
@@ -71,7 +72,9 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Master/detail načrtovalski vzorec -->
-            <p>Pri master/detail vzorcu bom uporabil, ko zdravnik izbere pacienta, ki se je predhodno sam vpisal, se njegovi podatki sami vstavijo v posamezna vnosna polja.</p>
+            <p>Master/detail sem kar veliko uporabljal. Npr. ko "zdravnik" izbere pacienta in željen vitalni znak, se bo prikazal graf.</p>
+            <p>Tudi ko generiram uporabnike, jih vstavim v oba "selecta" na zdravnikovi strani. Enako storim za pacienta, kreiranega na strani civilista.</p>
+            <p>Dodal sem tudi en Master/Detail za štos (namig: na civilistovi strani vpiši slab BMI).</p>
             <!-- KONEC: Master/detail načrtovalski vzorec -->
           </div>
         </div>
@@ -81,7 +84,8 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
-            <p><strong>TO-DO</strong>: Na tem mestu je potrebno navesti uporabljeno tehniko vizualizacije podatkov (za pomoč lahko uporabite primer iz <a href="https://github.com/mbostock/d3/wiki/Gallery" target="_blank">D3.js galerije</a>) in zakaj je bila ta tehnika izbrana.</p>
+            <p>Za vizualizacijo podatkov sem uporabil grafe in tabele.</p>
+            <p>Za grafe sem uporabil knjižnico<a href="https://www.amcharts.com/"> AmCharts</a>.</p>
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
         </div>

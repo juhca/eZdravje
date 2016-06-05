@@ -177,9 +177,9 @@ function narisi_graf(){
 						graph.type = "line";
 						graph.fillAlphas = 0;
 						graph.bullet = "round";
-						graph.lineColor = "#FF6600";
+						graph.lineColor = "#ff0000";
 						
-						graph.balloonText = "[[category]]: <b>[[value]] KG</b>";
+						graph.balloonText = "[[category]]: <b>[[value]] mm Hg</b>";
 						
 						chart.write('grafiDiv');
 				    }
@@ -215,9 +215,9 @@ function narisi_graf(){
 						graph.type = "line";
 						graph.fillAlphas = 0;
 						graph.bullet = "round";
-						graph.lineColor = "#FF6600";
+						graph.lineColor = "#ff0000";
 						
-						graph.balloonText = "[[category]]: <b>[[value]] KG</b>";
+						graph.balloonText = "[[category]]: <b>[[value]] mm Hg</b>";
 						
 						chart.write('grafiDiv');
 				    }
@@ -253,7 +253,7 @@ function narisi_graf(){
 						graph.type = "line";
 						graph.fillAlphas = 0;
 						graph.bullet = "round";
-						graph.lineColor = "#FF6600";
+						graph.lineColor = "#0D8ECF";
 						
 						graph.balloonText = "[[category]]: <b>[[value]] CM</b>";
 						
@@ -308,11 +308,11 @@ function pojdi_v_zdravnika(){
  * @param stPacienta zaporedna številka pacienta (1, 2 ali 3)
  * @return ehrId generiranega pacienta
  */
- var stevec = 1;
 function generiraj(){
-	if(stevec > 3) stevec = 1;
-	generirajPodatke(stevec);
-	stevec++;
+	for (var i = 1; i <= 3; i++)
+	{
+		generirajPodatke(i);	
+	}
 }
  
 function generirajPodatke(stPacienta) {
@@ -325,10 +325,47 @@ function generirajPodatke(stPacienta) {
 }
 
 function vstavi(tekt){
-	var select = document.getElementById("preberiObstojeciVitalniZnak");
-	select.innerHTML += "<option value="+tekt[12]+"|"+tekt[3]+"|"+tekt[4]+"|"+tekt[5]+"|"+tekt[11]+"|"+tekt[6]+"|"+tekt[7]+"|"+tekt[8]+"|"+tekt[9]+">"+tekt[0]+" "+tekt[1]+"</option>";
-	var select2 = document.getElementById("preberiEhrIdZaVitalneZnake");
-	select2.innerHTML += "<option value="+tekt[12]+">"+tekt[0]+" "+tekt[1]+"</option>";
+	sessionId = getSessionId();
+	$.ajaxSetup({
+    	headers: {
+        	"Ehr-session": sessionId
+    	}
+	});
+	$.ajax({
+	    url: baseUrl + "/ehr",
+	    type: 'POST',
+	    success: function (data) {
+	        var ehrId = data.ehrId;
+	        $("#ehrBranje").html("EHR: " + ehrId);
+	        var select = document.getElementById("preberiObstojeciVitalniZnak");
+			select.innerHTML += "<option value="+ehrId+"|"+tekt[3]+"|"+tekt[4]+"|"+tekt[5]+"|"+tekt[11]+"|"+tekt[6]+"|"+tekt[7]+"|"+tekt[8]+"|"+tekt[9]+">"+tekt[0]+" "+tekt[1]+"</option>";
+			var select2 = document.getElementById("preberiEhrIdZaVitalneZnake");
+			select2.innerHTML += "<option value="+ehrId+">"+tekt[0]+" "+tekt[1]+"</option>";
+	           // build party data
+	        var partyData = {
+	            firstNames: tekt[0],
+	            lastNames: tekt[1],
+	            dateOfBirth: tekt[2],
+	            partyAdditionalInfo: [
+	                {
+	                    key: "ehrId",
+	                    value: ehrId
+	                }
+	            ]
+	        };
+	        $.ajax({
+            url: baseUrl + "/demographics/party",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(partyData),
+            success: function (party) {
+                if (party.action == 'CREATE') {
+                    $("#result").html("Created: " + party.meta.href);
+                }
+            }
+        });
+	    }
+	});
 }
 
 /* ============== CIVILIST.HTML ==================== */
@@ -454,44 +491,30 @@ function vstaviPaciente(){
 			
 			/* ===== PRIDOBI EHR ===== */
 		var txt = window.name;
+		
 		var re1='.*?';	// Non-greedy match on filler
 		var re2='([A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12})';	// SQL GUID 1
 		var re3='.*?';	// Non-greedy match on filler
-		var re4='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re4='((?:[a-z][a-z]+))';	// Word 1
 		var re5='.*?';	// Non-greedy match on filler
-		var re6='(?:[a-z][a-z]+)';	// Uninteresting: word
-		var re7='.*?';	// Non-greedy match on filler
-		var re8='(?:[a-z][a-z]+)';	// Uninteresting: word
-		var re9='.*?';	// Non-greedy match on filler
-		var re10='(?:[a-z][a-z]+)';	// Uninteresting: word
-		var re11='.*?';	// Non-greedy match on filler
-		var re12='(?:[a-z][a-z]+)';	// Uninteresting: word
-		var re13='.*?';	// Non-greedy match on filler
-		var re14='(?:[a-z][a-z]+)';	// Uninteresting: word
-		var re15='.*?';	// Non-greedy match on filler
-		var re16='(?:[a-z][a-z]+)';	// Uninteresting: word
-		var re17='.*?';	// Non-greedy match on filler
-		var re18='(?:[a-z][a-z]+)';	// Uninteresting: word
-		var re19='.*?';	// Non-greedy match on filler
-		var re20='((?:[a-z][a-z]+))';	// Word 1
-		var re21='.*?';	// Non-greedy match on filler
-		var re22='((?:[a-z][a-z]+))';	// Word 2
+		var re6='((?:[a-z][a-z]+))';	// Word 2
 		
-		var p = new RegExp(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15+re16+re17+re18+re19+re20+re21+re22,["i"]);
+		var p = new RegExp(re1+re2+re3+re4+re5+re6,["i"]);
 		var m = p.exec(txt);
-			alert("SI tukaj");
 		if (m != null)
 		{
-			alert("SI tukaj");
 			var guid1=m[1];
 			var word1=m[2];
 			var word2=m[3];
 			guid1 = guid1.replace(/</,"&lt;");
 			word1 = word1.replace(/</,"&lt;");
 			word2 = word2.replace(/</,"&lt;");
-			alert(guid1+" "+word1+" "+word2);
-			//document.write("("+guid1.replace(/</,"&lt;")+")"+"("+word1.replace(/</,"&lt;")+")"+"("+word2.replace(/</,"&lt;")+")"+"\n");
 			select2.innerHTML += "<option value="+guid1+">"+word1+" "+word2+"</option>";
+			//document.write("("+guid1.replace(/</,"&lt;")+")"+"("+word1.replace(/</,"&lt;")+")"+"("+word2.replace(/</,"&lt;")+")"+"\n");
+		}
+		else
+		{
+			alert(window.name);
 		}
     		
 		//select2.innerHTML += "<option value="+ID_ehr+">"+tekt[0]+" "+tekt[1]+"</option>";
