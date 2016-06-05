@@ -44,19 +44,13 @@ function narisi_graf(){
 						chart.dataProvider = chartData;
 						chart.categoryField = "time";
 						graph.valueField = "temperature";
-					//	graph.type = "column";
+						
 						chart.addGraph(graph);
 						var categoryAxis = chart.categoryAxis;
 						categoryAxis.autoGridCount  = false;
 						categoryAxis.gridCount = chartData.length;
 						categoryAxis.gridPosition = "start";
 						categoryAxis.labelRotation = 90;
-						
-						/*
-						graph.fillAlphas = 0.8;
-						chart.angle = 30;
-						chart.depth3D = 15;
-						*/
 						
 						graph.type = "line";
 						graph.fillAlphas = 0;
@@ -341,6 +335,7 @@ function vstavi(tekt){
 			select.innerHTML += "<option value="+ehrId+"|"+tekt[3]+"|"+tekt[4]+"|"+tekt[5]+"|"+tekt[11]+"|"+tekt[6]+"|"+tekt[7]+"|"+tekt[8]+"|"+tekt[9]+">"+tekt[0]+" "+tekt[1]+"</option>";
 			var select2 = document.getElementById("preberiEhrIdZaVitalneZnake");
 			select2.innerHTML += "<option value="+ehrId+">"+tekt[0]+" "+tekt[1]+"</option>";
+			
 	           // build party data
 	        var partyData = {
 	            firstNames: tekt[0],
@@ -354,16 +349,58 @@ function vstavi(tekt){
 	            ]
 	        };
 	        $.ajax({
-            url: baseUrl + "/demographics/party",
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(partyData),
-            success: function (party) {
-                if (party.action == 'CREATE') {
-                    $("#result").html("Created: " + party.meta.href);
-                }
-            }
-        });
+	            url: baseUrl + "/demographics/party",
+	            type: 'POST',
+	            contentType: 'application/json',
+	            data: JSON.stringify(partyData),
+	            success: function (party) {
+	                if (party.action == 'CREATE') {
+	                    $("#result").html("Created: " + party.meta.href);
+	                }
+	            }
+    		});
+	        for(var i = 0; i <= 100; i++)
+			{
+				var datumInUra = (2016-i)+"-03-10T09:08";
+				var telesnaVisina = Math.floor((Math.random() * 200) + 150);
+				var telesnaTeza = Math.floor((Math.random() * 100) + 150);
+				var telesnaTemperatura = Math.floor((Math.random() * 20) + 25);
+				var sistolicniKrvniTlak = Math.floor((Math.random() * 100) + 150);
+				var diastolicniKrvniTlak = Math.floor((Math.random() * 100) + 150);
+				var nasicenostKrviSKisikom = Math.floor((Math.random() * 100) + 150);
+				var merilec = "Marija Trombolololovič";
+				$.ajaxSetup({
+					 headers: {"Ehr-Session": sessionId}
+				});
+				var podatki = {
+				    "ctx/language": "en",
+				    "ctx/territory": "SI",
+				    "ctx/time": datumInUra,
+				    "vital_signs/height_length/any_event/body_height_length": telesnaVisina+".0",
+				    "vital_signs/body_weight/any_event/body_weight": telesnaTeza+".0",
+				   	"vital_signs/body_temperature/any_event/temperature|magnitude": telesnaTemperatura+".0",
+				    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+				    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak+".0",
+				    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak+".0",
+				    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom+".0"
+				};
+				var parametriZahteve = {
+				    ehrId: ehrId,
+				    templateId: 'Vital Signs',
+				    format: 'FLAT',
+				    committer: merilec
+				};
+				$.ajax({
+				    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+				    type: 'POST',
+				    contentType: 'application/json',
+				    data: JSON.stringify(podatki),
+				    success: function (res) {},
+				    error: function(err) {
+				    	alert("NAPAKA pri posodabljanju");
+				    }
+				});
+			}
 	    }
 	});
 }
@@ -510,14 +547,11 @@ function vstaviPaciente(){
 			word1 = word1.replace(/</,"&lt;");
 			word2 = word2.replace(/</,"&lt;");
 			select2.innerHTML += "<option value="+guid1+">"+word1+" "+word2+"</option>";
-			//document.write("("+guid1.replace(/</,"&lt;")+")"+"("+word1.replace(/</,"&lt;")+")"+"("+word2.replace(/</,"&lt;")+")"+"\n");
 		}
 		else
 		{
 			alert(window.name);
 		}
-    		
-		//select2.innerHTML += "<option value="+ID_ehr+">"+tekt[0]+" "+tekt[1]+"</option>";
 	}
 }
 
