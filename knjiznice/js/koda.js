@@ -450,6 +450,51 @@ function vstaviPaciente(){
 	{
 		var select = document.getElementById("preberiObstojeciVitalniZnak");
 		select.innerHTML += window.name;
+		var select2 = document.getElementById("preberiEhrIdZaVitalneZnake");
+			
+			/* ===== PRIDOBI EHR ===== */
+		var txt = window.name;
+		var re1='.*?';	// Non-greedy match on filler
+		var re2='([A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12})';	// SQL GUID 1
+		var re3='.*?';	// Non-greedy match on filler
+		var re4='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re5='.*?';	// Non-greedy match on filler
+		var re6='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re7='.*?';	// Non-greedy match on filler
+		var re8='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re9='.*?';	// Non-greedy match on filler
+		var re10='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re11='.*?';	// Non-greedy match on filler
+		var re12='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re13='.*?';	// Non-greedy match on filler
+		var re14='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re15='.*?';	// Non-greedy match on filler
+		var re16='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re17='.*?';	// Non-greedy match on filler
+		var re18='(?:[a-z][a-z]+)';	// Uninteresting: word
+		var re19='.*?';	// Non-greedy match on filler
+		var re20='((?:[a-z][a-z]+))';	// Word 1
+		var re21='.*?';	// Non-greedy match on filler
+		var re22='((?:[a-z][a-z]+))';	// Word 2
+		
+		var p = new RegExp(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15+re16+re17+re18+re19+re20+re21+re22,["i"]);
+		var m = p.exec(txt);
+			alert("SI tukaj");
+		if (m != null)
+		{
+			alert("SI tukaj");
+			var guid1=m[1];
+			var word1=m[2];
+			var word2=m[3];
+			guid1 = guid1.replace(/</,"&lt;");
+			word1 = word1.replace(/</,"&lt;");
+			word2 = word2.replace(/</,"&lt;");
+			alert(guid1+" "+word1+" "+word2);
+			//document.write("("+guid1.replace(/</,"&lt;")+")"+"("+word1.replace(/</,"&lt;")+")"+"("+word2.replace(/</,"&lt;")+")"+"\n");
+			select2.innerHTML += "<option value="+guid1+">"+word1+" "+word2+"</option>";
+		}
+    		
+		//select2.innerHTML += "<option value="+ID_ehr+">"+tekt[0]+" "+tekt[1]+"</option>";
 	}
 }
 
