@@ -110,7 +110,7 @@ function narisi_graf(){
 				});
 			}
 				// telesna teza
-			else
+			else if(select1 == 2)
 			{
 				globalni_select_graf = 2;
 				globalni_ehr_graf = ehrId;
@@ -142,6 +142,120 @@ function narisi_graf(){
 						graph.lineColor = "#FF6600";
 						
 						graph.balloonText = "[[category]]: <b>[[value]] KG</b>";
+						
+						chart.write('grafiDiv');
+				    }
+				});
+			}
+				// sistolicni krvni tlak
+			else if(select1 == 3)
+			{
+				globalni_select_graf = 3;
+				globalni_ehr_graf = ehrId;
+				$.ajax({
+				    url: baseUrl + "/view/" + ehrId + "/blood_pressure",
+				    type: 'GET',
+				    headers: {"Ehr-session": sessionId},
+				    success: function (res) {
+				        for (var i in res) {
+				        	var objekt = {
+				        		"time": res[i].time,
+				        		"systolic": res[i].systolic
+				        	};
+				        	chartData.push(objekt);
+				        }
+						chart.dataProvider = chartData;
+						chart.categoryField = "time";
+						graph.valueField = "systolic";
+						chart.addGraph(graph);
+						var categoryAxis = chart.categoryAxis;
+						categoryAxis.autoGridCount  = false;
+						categoryAxis.gridCount = chartData.length;
+						categoryAxis.gridPosition = "start";
+						categoryAxis.labelRotation = 90;
+						
+						graph.type = "line";
+						graph.fillAlphas = 0;
+						graph.bullet = "round";
+						graph.lineColor = "#FF6600";
+						
+						graph.balloonText = "[[category]]: <b>[[value]] KG</b>";
+						
+						chart.write('grafiDiv');
+				    }
+				});
+			}
+				// diastolicni krvni tlak
+			else if(select1 == 4)
+			{
+				globalni_select_graf = 4;
+				globalni_ehr_graf = ehrId;
+				$.ajax({
+				    url: baseUrl + "/view/" + ehrId + "/blood_pressure",
+				    type: 'GET',
+				    headers: {"Ehr-session": sessionId},
+				    success: function (res) {
+				        for (var i in res) {
+				        	var objekt = {
+				        		"time": res[i].time,
+				        		"diastolic": res[i].diastolic
+				        	};
+				        	chartData.push(objekt);
+				        }
+						chart.dataProvider = chartData;
+						chart.categoryField = "time";
+						graph.valueField = "diastolic";
+						chart.addGraph(graph);
+						var categoryAxis = chart.categoryAxis;
+						categoryAxis.autoGridCount  = false;
+						categoryAxis.gridCount = chartData.length;
+						categoryAxis.gridPosition = "start";
+						categoryAxis.labelRotation = 90;
+						
+						graph.type = "line";
+						graph.fillAlphas = 0;
+						graph.bullet = "round";
+						graph.lineColor = "#FF6600";
+						
+						graph.balloonText = "[[category]]: <b>[[value]] KG</b>";
+						
+						chart.write('grafiDiv');
+				    }
+				});
+			}
+				// telesna visina
+			else if(select1 == 5)
+			{
+				globalni_select_graf = 5;
+				globalni_ehr_graf = ehrId;
+				$.ajax({
+				    url: baseUrl + "/view/" + ehrId + "/height",
+				    type: 'GET',
+				    headers: {"Ehr-session": sessionId},
+				    success: function (res) {
+				        for (var i in res) {
+				        	var objekt = {
+				        		"time": res[i].time,
+				        		"height": res[i].height
+				        	};
+				        	chartData.push(objekt);
+				        }
+						chart.dataProvider = chartData;
+						chart.categoryField = "time";
+						graph.valueField = "height";
+						chart.addGraph(graph);
+						var categoryAxis = chart.categoryAxis;
+						categoryAxis.autoGridCount  = false;
+						categoryAxis.gridCount = chartData.length;
+						categoryAxis.gridPosition = "start";
+						categoryAxis.labelRotation = 90;
+						
+						graph.type = "line";
+						graph.fillAlphas = 0;
+						graph.bullet = "round";
+						graph.lineColor = "#FF6600";
+						
+						graph.balloonText = "[[category]]: <b>[[value]] CM</b>";
 						
 						chart.write('grafiDiv');
 				    }
