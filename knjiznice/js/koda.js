@@ -359,7 +359,7 @@ function vstavi(tekt){
 	                }
 	            }
     		});
-	        for(var i = 0; i <= 100; i++)
+	        for(var i = 0; i <= 20; i++)
 			{
 				var datumInUra = (2016-i)+"-03-10T09:08";
 				var telesnaVisina = Math.floor((Math.random() * 200) + 150);
@@ -400,6 +400,7 @@ function vstavi(tekt){
 				    	alert("NAPAKA pri posodabljanju");
 				    }
 				});
+				setTimeout(10);
 			}
 	    }
 	});
