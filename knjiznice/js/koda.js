@@ -60,7 +60,8 @@ var chartData = [{
 	
 var prikazan_graf = 0;
 var chartData = [];
-
+var globalni_ehr_graf = "";
+var globalni_select_graf = -1;
 function narisi_graf(){
 	var select1 = document.getElementById("preberiTipZaVitalneZnake").selectedIndex;
 	var select2 = document.getElementById("preberiEhrIdZaVitalneZnake").selectedIndex;
@@ -69,64 +70,154 @@ function narisi_graf(){
 		sessionId = getSessionId();
 		var ehrId = $("#meritveVitalnihZnakovEHRid").val();
 			
-			// zacetek grafa
-		var chart = new AmCharts.AmSerialChart();
-		var graph = new AmCharts.AmGraph();
-			// telesna temperatura
-		if(select1 == 0)
+		if(globalni_ehr_graf != ehrId || globalni_select_graf != select1)
 		{
-			$.ajax({
-			    url: baseUrl + "/view/" + ehrId + "/body_temperature",
-			    type: 'GET',
-			    headers: {"Ehr-session": sessionId},
-			    success: function (res) {
-			        for (var i in res) {
-			        //	alert(res[i].time + ': ' + res[i].temperature  + res[i].unit);
-			            //$("#result").append(res[i].time + ': ' + res[i].temperature  + res[i].unit + "<br>");
-			        	var objekt = {
-			        		"time": res[i].time,
-			        		"temperature": res[i].temperature
-			        	};
-			        	chartData.push(objekt);
-			        }
-					chart.dataProvider = chartData;
-					chart.categoryField = "time";
-					graph.valueField = "temperature";
-				//	graph.type = "column";
-					chart.addGraph(graph);
-					var categoryAxis = chart.categoryAxis;
-					categoryAxis.autoGridCount  = false;
-					categoryAxis.gridCount = chartData.length;
-					categoryAxis.gridPosition = "start";
-					categoryAxis.labelRotation = 90;
-					
-					/*
-					graph.fillAlphas = 0.8;
-					chart.angle = 30;
-					chart.depth3D = 15;
-					*/
-					
-					graph.type = "line";
-					graph.fillAlphas = 0;
-					graph.bullet = "round";
-					graph.lineColor = "#ff0000";
-					
-					graph.balloonText = "[[category]]: <b>[[value]] °C</b>";
-					
-					chart.write('grafiDiv');
-			    }
-			});
+			chartData = [];
+			document.getElementById("grafiDiv").innerHTML = "";
+				// zacetek grafa
+			var chart = new AmCharts.AmSerialChart();
+			var graph = new AmCharts.AmGraph();
+				// telesna temperatura
+			if(select1 == 0)
+			{
+				globalni_select_graf = 0;
+				globalni_ehr_graf = ehrId;
+				$.ajax({
+				    url: baseUrl + "/view/" + ehrId + "/body_temperature",
+				    type: 'GET',
+				    headers: {"Ehr-session": sessionId},
+				    success: function (res) {
+				        for (var i in res) {
+				        //	alert(res[i].time + ': ' + res[i].temperature  + res[i].unit);
+				            //$("#result").append(res[i].time + ': ' + res[i].temperature  + res[i].unit + "<br>");
+				        	var objekt = {
+				        		"time": res[i].time,
+				        		"temperature": res[i].temperature
+				        	};
+				        	chartData.push(objekt);
+				        }
+						chart.dataProvider = chartData;
+						chart.categoryField = "time";
+						graph.valueField = "temperature";
+					//	graph.type = "column";
+						chart.addGraph(graph);
+						var categoryAxis = chart.categoryAxis;
+						categoryAxis.autoGridCount  = false;
+						categoryAxis.gridCount = chartData.length;
+						categoryAxis.gridPosition = "start";
+						categoryAxis.labelRotation = 90;
+						
+						/*
+						graph.fillAlphas = 0.8;
+						chart.angle = 30;
+						chart.depth3D = 15;
+						*/
+						
+						graph.type = "line";
+						graph.fillAlphas = 0;
+						graph.bullet = "round";
+						graph.lineColor = "#ff0000";
+						
+						graph.balloonText = "[[category]]: <b>[[value]] °C</b>";
+						
+						chart.write('grafiDiv');
+				    }
+				});
+			}
+				// telesna temperatura s podhladitvami
+			else if(select1 == 1)
+			{
+				globalni_select_graf = 1;
+				globalni_ehr_graf = ehrId;
+				var AQL = "select " + "t/data[at0002]/events[at0003]/time/value as cas, " +	"t/data[at0002]/events[at0003]/data[at0001]/items[at0004]/value/magnitude as temperatura_vrednost, " +	"t/data[at0002]/events[at0003]/data[at0001]/items[at0004]/value/units as temperatura_enota " +	"from EHR e[e/ehr_id/value='" + ehrId + "'] " +	"contains OBSERVATION t[openEHR-EHR-OBSERVATION.body_temperature.v1] " + "where t/data[at0002]/events[at0003]/data[at0001]/items[at0004]/value/magnitude<35 " +	"order by t/data[at0002]/events[at0003]/time/value desc " +	"limit 10";
+				$.ajax({
+				    url: baseUrl + "/query?" + $.param({"aql": AQL}),
+				    type: 'GET',
+				    headers: {"Ehr-Session": sessionId},
+				    success: function (res) {
+				    	if (res) {
+				    		var rows = res.resultSet;
+					        for (var i in rows) {
+					        	var objekt = {
+					        		"time": rows[i].cas,
+					        		"temperature": rows[i].temperatura_vrednost
+					        	};
+					        	chartData.push(objekt);
+					        }
+							chart.dataProvider = chartData;
+							chart.categoryField = "time";
+							graph.valueField = "temperature";
+							graph.type = "column";
+							chart.addGraph(graph);
+							var categoryAxis = chart.categoryAxis;
+							categoryAxis.autoGridCount  = false;
+							categoryAxis.gridCount = chartData.length;
+							categoryAxis.gridPosition = "start";
+							categoryAxis.labelRotation = 90;
+							graph.lineColor = "#0D8ECF";
+							
+							graph.fillAlphas = 0.3;
+							//chart.angle = 30;
+							//chart.depth3D = 15;
+							
+						/*	graph.type = "line";
+							graph.fillAlphas = 0;
+							graph.bullet = "round";
+							graph.lineColor = "#ff0000";
+							*/
+							graph.balloonText = "[[category]]: <b>[[value]] °C</b>";
+							
+							chart.write('grafiDiv');
+				    	}
+				    }
+				});
+			}
+				// telesna teza
+			else
+			{
+				globalni_select_graf = 2;
+				globalni_ehr_graf = ehrId;
+				$.ajax({
+				    url: baseUrl + "/view/" + ehrId + "/weight",
+				    type: 'GET',
+				    headers: {"Ehr-session": sessionId},
+				    success: function (res) {
+				        for (var i in res) {
+				        	var objekt = {
+				        		"time": res[i].time,
+				        		"weight": res[i].weight
+				        	};
+				        	chartData.push(objekt);
+				        }
+						chart.dataProvider = chartData;
+						chart.categoryField = "time";
+						graph.valueField = "weight";
+						chart.addGraph(graph);
+						var categoryAxis = chart.categoryAxis;
+						categoryAxis.autoGridCount  = false;
+						categoryAxis.gridCount = chartData.length;
+						categoryAxis.gridPosition = "start";
+						categoryAxis.labelRotation = 90;
+						
+						/*
+						graph.fillAlphas = 0.8;
+						chart.angle = 30;
+						chart.depth3D = 15;
+						*/
+						
+						graph.type = "line";
+						graph.fillAlphas = 0;
+						graph.bullet = "round";
+						graph.lineColor = "#FF6600";
+						
+						graph.balloonText = "[[category]]: <b>[[value]] °C</b>";
+						
+						chart.write('grafiDiv');
+				    }
+				});
+			}
 		}
-			// telesna visina
-		else if(select1 == 1)
-		{
-			
-		}
-			// telesna teza
-		else
-		{
-			
-		}
+		
 		prikazan_graf = 1;
 		
 	}
